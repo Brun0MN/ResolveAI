@@ -1,0 +1,72 @@
+# ResolveAI v2: only the app is reachable on localhost. The target has no
+# external network, privileged access, Docker socket or host directory mounts.
+services:
+  real-target:
+    build: .
+    command: ["uvicorn", "real_lab.main:app", "--host", "0.0.0.0", "--port", "8002"]
+    environment:
+      LAB_TOKEN: ${LAB_TOKEN:-resolveai-local-demo-token-change-this}
+    networks: [sandbox]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,noexec,size=32m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 64
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/target/ping',timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 8
+    restart: unless-stopped
+  lab:
+    build: .
+    command: ["uvicorn", "lab.main:app", "--host", "0.0.0.0", "--port", "8001"]
+    depends_on:
+      real-target:
+        condition: service_healthy
+    environment:
+      LAB_TOKEN: ${LAB_TOKEN:-resolveai-local-demo-token-change-this}
+      REAL_LAB_URL: http://real-target:8002
+      LAB_DATABASE_PATH: /workspace/data/lab.sqlite3
+    volumes:
+      - lab_data:/workspace/data
+    networks: [sandbox]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 192m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/lab/ping',timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 8
+    restart: unless-stopped
+  app:
+    build: .
+    depends_on:
+      lab:
+        condition: service_healthy
+    environment:
+      LAB_TOKEN: ${LAB_TOKEN:-resolveai-local-demo-token-change-this}
+      LAB_URL: http://lab:8001
+      DATABASE_PATH: /workspace/data/resolveai.sqlite3
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.1-flash-lite}
+      GEMINI_REQUEST_TIMEOUT_S: ${GEMINI_REQUEST_TIMEOUT_S:-20}
+      AUTO_MIN_CONFIDENCE: ${AUTO_MIN_CONFIDENCE:-0.70}
+    volumes:
+      - app_data:/workspace/data
+    networks: [default, sandbox]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 448m
+    ports:
+      - '127.0.0.1:8501:8501'
+    restart: unless-stopped
+networks:
+  sandbox:
+    internal: true
+volumes:
+  app_data:
+  lab_data:

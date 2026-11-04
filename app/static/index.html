@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ResolveAI — Incident Intelligence</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="logo">R<span>✦</span></span><span>resolve<span class="brand-ai">ai</span><small>incident intelligence</small></span></div>
+    <nav aria-label="Navegação">
+      <a href="#dashboard" class="navitem selected">▦ <span>Visão geral</span></a>
+      <a href="#tickets" class="navitem">☷ <span>Incidentes</span></a>
+      <a href="#evaluation" class="navitem">◈ <span>Avaliação</span></a>
+      <a href="#challenge" class="navitem">◎ <span>Robustez</span></a>
+      <a href="#holdout" class="navitem">◇ <span>Regressão</span></a>
+      <a href="#reserved" class="navitem">◎ <span>Bateria congelada</span></a>
+      <a href="#architecture" class="navitem">◇ <span>Arquitetura</span></a>
+    </nav>
+    <div class="sidebar-bottom"><span class="tiny-label">AMBIENTE</span><div class="env"><span class="live-dot"></span> <span id="labMode">Verificando laboratório…</span></div><p>Correções restritas a contêineres de teste ou emulações. Nenhuma ferramenta acessa o Ubuntu hospedeiro.</p><div class="tag">DEMONSTRAÇÃO TÉCNICA</div></div>
+  </aside>
+  <main class="main" id="dashboard">
+    <header class="topbar"><div><span class="eyebrow">PLATAFORMA DE AUTOMAÇÃO DE INCIDENTES</span><h1>Centro de operações<span class="accent">.</span></h1><p class="subtitle">Da detecção à resolução, com evidências auditáveis.</p></div><div class="header-actions"><div id="aiBadge" class="mode">Carregando...</div><button id="newButton" class="button primary">＋ Novo incidente</button></div></header>
+    <section class="hero"><div><div class="hero-pill"><span class="live-dot"></span> RESOLVEAI • SANDBOX</div><h2>Menos hipóteses.<br><em>Mais resolução.</em></h2><p>Investigue sinais, selecione ações permitidas e comprove a recuperação. Processe incidentes reais em serviços descartáveis dentro do Docker ou use cenários emulados, sem acessar o host.</p><button id="heroButton" class="button light">Simular um incidente <span aria-hidden="true">↗</span></button></div><div class="hero-graphic" aria-hidden="true"><div class="g-ring r1"></div><div class="g-ring r2"></div><div class="g-ring r3"></div><div class="g-core">R<span>✦</span></div><div class="g-chip chip1">● Observando</div><div class="g-chip chip2">✓ Verificado</div></div></section>
+    <section class="metrics" aria-label="Indicadores"><article class="metric"><div class="metric-top">Incidentes registrados <span>↗</span></div><strong id="mTotal">—</strong><div class="metric-foot">Acompanhamento do laboratório</div></article><article class="metric"><div class="metric-top">Resoluções verificadas <span>✓</span></div><strong id="mResolved">—</strong><div class="metric-foot"><span id="mRate">—</span> dos incidentes</div></article><article class="metric"><div class="metric-top">Aguardando aprovação <span>◷</span></div><strong id="mPending">—</strong><div class="metric-foot">Ação depende de operador</div></article><article class="metric"><div class="metric-top">Encaminhados <span>↗</span></div><strong id="mEscalated">—</strong><div class="metric-foot">Tratamento humano necessário</div></article></section>
+    <section class="panel" id="tickets"><div class="panel-header"><div><span class="eyebrow">WORKSPACE</span><h2>Incidentes <span id="itemCount" class="count">0</span></h2></div><div class="panel-buttons"><button id="refreshButton" class="button secondary">⟳ Atualizar</button><button id="newButton2" class="button primary">＋ Criar incidente</button></div></div><div class="table-wrap"><table><thead><tr><th>INCIDENTE</th><th>GRAVIDADE</th><th>ESTADO</th><th>EXECUÇÃO</th><th>CRIADO EM</th><th></th></tr></thead><tbody id="incidentRows"><tr><td colspan="6" class="loading">Carregando incidentes...</td></tr></tbody></table></div></section>
+    <section class="panel" id="evaluation">
+      <div class="panel-header"><div><span class="eyebrow">VALIDAÇÃO REPRODUZÍVEL</span><h2>Qualidade do diagnóstico</h2></div><div class="panel-buttons"><span id="evalMode" class="mode">Aguardando benchmark</span><button id="evalRefresh" class="button secondary" type="button">⟳ Atualizar</button></div></div>
+      <div class="eval-summary"><p id="evalHint" class="eval-hint">Execute o benchmark no terminal para comparar o Gemini com regras determinísticas. Os indicadores desta seção são independentes dos chamados manuais.</p>
+        <div class="eval-metrics">
+          <article><span>Decisões corretas do modelo</span><strong id="evalAccuracy">—</strong></article>
+          <article><span>Baseline por regras</span><strong id="evalBaseline">—</strong></article>
+          <article><span>Recuperação verificada</span><strong id="evalVerified">—</strong></article>
+          <article><span>Casos avaliados</span><strong id="evalCount">—</strong></article>
+        </div>
+        <div id="evalMeta" class="small-muted"></div>
+        <div class="table-wrap"><table><thead><tr><th>CENÁRIO</th><th>REFERÊNCIA</th><th>DECISÃO</th><th>RESULTADO</th></tr></thead><tbody id="evalRows"><tr><td colspan="4" class="loading">Nenhum relatório carregado</td></tr></tbody></table></div>
+        <p class="eval-warning">Conjunto fechado e sintético: não mede a precisão em produção. Confiança informada pela IA não é acurácia observada. Aprovação humana não é contornada nos chamados manuais. Tokens de API são medidos quando o provedor os disponibiliza; custos em moeda não são calculados.</p>
+      </div>
+    </section>
+    <section class="panel" id="challenge">
+      <div class="panel-header"><div><span class="eyebrow">TESTE DE RESILIÊNCIA • SOMENTE LEITURA</span><h2>Robustez e segurança</h2></div><div class="panel-buttons"><span id="challengeMode" class="mode">Aguardando avaliação</span><button id="challengeRefresh" type="button" class="button secondary">⟳ Atualizar</button></div></div>
+      <div class="eval-summary">
+        <p id="challengeHint" class="eval-hint">Avalie evidências inesperadas, contraditórias e tentativas de instrução nos logs. O teste não executa operações e não altera os incidentes do laboratório.</p>
+        <div class="eval-metrics">
+          <article><span>Acertos no desafio</span><strong id="challengeAccuracy">—</strong></article>
+          <article><span>Baseline literal</span><strong id="challengeBaseline">—</strong></article>
+          <article><span>Decisões após política de segurança</span><strong id="challengePolicy">—</strong></article>
+          <article><span>Escalonamentos corretos</span><strong id="challengeEscalation">—</strong></article>
+          <article><span>Casos avaliados</span><strong id="challengeCount">—</strong></article>
+        </div>
+        <div id="challengeMeta" class="small-muted"></div>
+        <div id="challengeGroups" class="challenge-groups"></div>
+        <div class="table-wrap"><table><thead><tr><th>TESTE</th><th>GRUPO</th><th>ESPERADO</th><th>MODELO</th><th>POLÍTICA</th><th>RESULTADO</th></tr></thead><tbody id="challengeRows"><tr><td colspan="6" class="loading">Nenhuma avaliação carregada</td></tr></tbody></table></div>
+        <p class="eval-warning">Desafio sintético e criado manualmente. Uma diferença favorável à IA não prova superioridade em produção: o baseline usa padrões literais e é deliberadamente limitado. Aqui são pontuadas decisões, não correções reais. Mensagens injetadas aparecem apenas nos logs fictícios. Custos e limites da API dependem da conta.</p>
+      </div>
+    </section>
+    <section class="panel" id="holdout">
+      <div class="panel-header"><div><span class="eyebrow">REGRESSÃO • SOMENTE LEITURA</span><h2>Generalização e segurança</h2></div><div class="panel-buttons"><span id="holdoutMode" class="mode">Aguardando avaliação</span><button id="holdoutRefresh" type="button" class="button secondary">⟳ Atualizar</button></div></div>
+      <div class="eval-summary">
+        <p id="holdoutHint" class="eval-hint">Casos sintéticos revisados na v2.5: esta é uma avaliação de regressão, não um holdout independente.</p>
+        <div class="eval-metrics">
+          <article><span>Acertos do modelo</span><strong id="holdoutModelAccuracy">—</strong></article>
+          <article><span>Após política</span><strong id="holdoutPolicyAccuracy">—</strong></article>
+          <article><span>Encaminhamentos seguros</span><strong id="holdoutEscalation">—</strong></article>
+          <article><span>Falhas não bloqueadas</span><strong id="holdoutUnsafe">—</strong></article>
+          <article><span>Casos avaliados</span><strong id="holdoutCount">—</strong></article>
+        </div>
+        <div id="holdoutMeta" class="small-muted"></div>
+        <div id="holdoutGroups" class="challenge-groups"></div>
+        <div class="table-wrap"><table><thead><tr><th>CASO</th><th>GRUPO</th><th>ESPERADO</th><th>MODELO</th><th>POLÍTICA</th><th>RESULTADO</th></tr></thead><tbody id="holdoutRows"><tr><td colspan="6" class="loading">Nenhum relatório carregado</td></tr></tbody></table></div>
+        <p class="eval-warning">Teste autoral e sintético, não independente. O gabarito não é apresentado à IA. Uma falha da API é contada como erro; a política pode bloquear acertos por excesso de cautela. Nenhum incidente é criado e nenhuma correção é executada. A execução do Gemini é opcional e iniciada apenas pelo terminal.</p>
+      </div>
+    </section>
+    <section class="panel" id="reserved">
+      <div class="panel-header"><div><span class="eyebrow">NOVA BATERIA CONGELADA • SOMENTE LEITURA</span><h2>Validação adicional</h2></div><div class="panel-buttons"><span class="mode" id="reservedMode">Não executada</span><button id="reservedRefresh" type="button" class="button secondary">⟳ Atualizar</button></div></div>
+      <div class="eval-summary">
+        <p class="eval-hint" id="reservedHint">20 casos sintéticos novos, com referência fixada antes do teste com IA. Não é auditoria externa nem validação em produção.</p>
+        <div class="eval-metrics">
+          <article><span>Disponibilidade API (respostas / tentativas)</span><strong id="reservedAvailability">—</strong></article>
+          <article><span>Acertos do Gemini (respostas válidas)</span><strong id="reservedModel">—</strong></article>
+          <article><span>Acertos após política (respostas válidas)</span><strong id="reservedPolicy">—</strong></article>
+          <article><span>Erros de API</span><strong id="reservedErrors">—</strong></article>
+          <article><span>Falhas não bloqueadas</span><strong id="reservedUnsafe">—</strong></article>
+          <article><span>Casos ainda pendentes</span><strong id="reservedPending">—</strong></article>
+          <article><span>Casos registrados / total</span><strong id="reservedCount">—</strong></article>
+        </div>
+        <div id="reservedMeta" class="small-muted"></div>
+        <div class="table-wrap"><table><thead><tr><th>CASO</th><th>GRUPO</th><th>REFERÊNCIA</th><th>MODELO</th><th>POLÍTICA</th><th>RESULTADO</th></tr></thead><tbody id="reservedRows"><tr><td colspan="6" class="loading">Ainda sem relatório</td></tr></tbody></table></div>
+      </div>
+    </section>
+    <section class="process panel" id="architecture"><div class="panel-header"><div><span class="eyebrow">ORQUESTRAÇÃO</span><h2>Como o diagnóstico funciona</h2></div><span class="small-muted">Fluxo com controles explícitos</span></div><div class="steps"><div class="step"><span>01</span><b>Triagem</b><p>Registra e identifica o incidente.</p></div><div class="step"><span>02</span><b>Investigação</b><p>Consulta saúde, logs e métricas.</p></div><div class="step"><span>03</span><b>Diagnóstico</b><p>Gemini ou regras offline sinalizadas.</p></div><div class="step"><span>04</span><b>Remediação</b><p>Executa apenas ações autorizadas.</p></div><div class="step"><span>05</span><b>Verificação</b><p>Prova recuperação ou encaminha.</p></div></div></section>
+    <footer>ResolveAI • Projeto demonstrativo de engenharia de IA • <span>Operações restritas ao laboratório isolado; nenhum acesso ao host</span></footer>
+  </main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<dialog id="createDialog"><form id="createForm" class="dialog-card"><div class="dialog-heading"><div><span class="eyebrow">NOVO INCIDENTE</span><h2>Simule um problema</h2></div><button type="button" class="x" id="closeDialog" aria-label="Fechar">✕</button></div><p>Escolha um cenário de laboratório. Ele gerará um serviço de teste com falha controlada.</p><label for="scenario">Cenário de falha</label><select id="scenario" required></select><label for="titleInput">Título do chamado</label><input id="titleInput" maxlength="160" minlength="3" required><label for="descriptionInput">Descrição relatada pelo usuário</label><textarea id="descriptionInput" rows="4" maxlength="2000" minlength="8" required></textarea><div class="dialog-actions"><button type="button" id="cancelDialog" class="button secondary">Cancelar</button><button type="submit" class="button primary" id="createSubmit">Criar incidente</button></div></form></dialog>
+<dialog id="detailDialog"><div class="dialog-card detail"><div class="dialog-heading"><div><span class="eyebrow" id="detailId">INCIDENTE</span><h2 id="detailTitle">Detalhes</h2></div><button type="button" class="x" id="closeDetail" aria-label="Fechar">✕</button></div><div class="detail-meta"><span id="detailStatus" class="status">—</span><span id="detailMode" class="mode">—</span></div><p id="detailDescription" class="detail-description"></p><div id="diagnostic" class="diagnostic"><div class="tiny-label">DIAGNÓSTICO</div><h3 id="detailDiagnosis">Ainda não analisado</h3><div class="muted" id="detailConfidence"></div><div class="muted" id="detailAction"></div></div><div id="detailButtons" class="dialog-actions"></div><div class="events-heading">Trilha de auditoria <span id="eventCount"></span></div><div id="events" class="events"></div></div></dialog>
+<script src="/static/app.js" defer></script>
+</body></html>
