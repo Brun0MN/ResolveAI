@@ -6,6 +6,26 @@ O **ResolveAI** é uma aplicação web que demonstra como inteligência artifici
 
 O objetivo é demonstrar **automação responsável**, com decisões auditáveis, encaminhamento humano quando necessário e avaliação quantitativa. Não é um produto de operações em produção.
 
+<!-- resolveai-screenshots:start -->
+## Capturas da aplicação
+
+As imagens abaixo mostram o ResolveAI 2.8 em funcionamento no laboratório de demonstração.
+
+### Painel de operações
+
+![Painel de operações do ResolveAI, com indicadores e incidentes](docs/images/painel.png)
+
+### Diagnóstico de incidente com Gemini
+
+![Diagnóstico de variável de configuração ausente, correção controlada e verificação HTTP 200](docs/images/diagnostico.png)
+
+### Avaliação de 20 casos sintéticos
+
+![Relatório de avaliação: 75% de acerto do Gemini e 100% após a política nos casos sintéticos respondidos](docs/images/avaliacao.png)
+
+> **Interpretação:** estes resultados referem-se a **20 casos sintéticos de laboratório**. O resultado de 100% após a política não é uma garantia de segurança ou desempenho em produção, e a disponibilidade medida no relatório não representa disponibilidade contínua da API.
+<!-- resolveai-screenshots:end -->
+
 ## O que a demonstração permite fazer
 
 - Criar incidentes sintéticos de infraestrutura e aplicações, acompanhar a investigação e conferir os eventos de auditoria.
